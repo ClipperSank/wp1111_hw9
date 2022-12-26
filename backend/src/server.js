@@ -3,6 +3,8 @@ import cors from 'cors'
 import db from './db'
 import routes from './routes/index';
 
+const path = require('path')
+
 const app = express()
 
 // init middleware
@@ -13,25 +15,21 @@ if(process.env.NODE_ENV === 'development'){
 app.use(express.json());
 
 // define routes
-app.use('/', routes);
+app.use('/api', routes);
 
 
 db.connect();
-
+console.log(process.env.NODE_ENV)
 if(process.env.NODE_ENV === 'production'){
     const __dirname = path.resolve()
-    app.use(express.static(path.join(__dirname, "../../frontend", "build")))
+    app.use(express.static(path.join(__dirname, "../frontend", "build")))
     app.get("/*", function(req, res){
-        res.sendFile(path.join(__dirname, "../../frontend", "build", "index.html"))
+        res.sendFile(path.join(__dirname, "../frontend", "build", "index.html"))
     })
 }
 
-// define server
-const port =  process.env.NODE_ENV === 'production'
-    ?'/api'
-    :'http://localhost:4000/api'
 
-// const port = process.env.PORT || 4000
+const port = process.env.PORT || 4000
 app.listen(port, ()=>{
     console.log(`Server is up on port ${port}`)
 })
