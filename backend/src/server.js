@@ -13,11 +13,6 @@ if(process.env.NODE_ENV === 'development'){
 }
 
 app.use(express.json());
-
-// define routes
-app.use('/api', routes);
-
-
 db.connect();
 console.log(process.env.NODE_ENV)
 if(process.env.NODE_ENV === 'production'){
@@ -27,6 +22,14 @@ if(process.env.NODE_ENV === 'production'){
         res.sendFile(path.join(__dirname, "../frontend", "build", "index.html"))
     })
 }
+// define routes
+app.get("/api", (req, res) => {
+    res.send({message: "helo"}).status(200)
+})
+app.use('/api', routes);
+
+
+
 
 
 const port = process.env.PORT || 4000
